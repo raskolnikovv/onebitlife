@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 
+import DefaultButton from "../../Components/Common/DefaultButton";
+import LifeStatus from "../../Components/Common/LifeStatus";
+
 export default function Start() {
   return (
     <View style={styles.container}>
@@ -10,10 +13,17 @@ export default function Start() {
             style={styles.logo} 
             source={require("../../assets/icons/logo3.png")} 
           />
+          <LifeStatus />
           <Text style={styles.description}>
             Vamos transformar sua vida {`\n`} em jogo, buscando sempre {`\n`} o 
             melhor nível.
           </Text>
+          <DefaultButton
+            buttonText={"Continuar"}
+            handlePress={''}
+            width={250}
+            height={50}
+          />
         </View>
       </ScrollView>
 
