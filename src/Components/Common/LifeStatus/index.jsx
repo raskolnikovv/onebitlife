@@ -4,14 +4,7 @@ import { View, StyleSheet } from "react-native";
 import Lottie from "lottie-react-native";
 
 export default function LifeStatus() {
-  /*Status:
-   100 - Máximo
-   50 - Médio
-   25 - baixo
-   00 - Curto (Acabou o game)
-   No robô, nós temos primeiros Felicidade e depois a Saúde xx-xx
-*/
-
+ 
   return (
     <View style={styles.container}>
       <Lottie
