@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center"
   },
   habitTitle: {
     color: "white",
