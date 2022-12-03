@@ -6,8 +6,12 @@ import LifeStatus from "../../Components/Common/LifeStatus";
 import StatusBar from "../../Components/Home/StatusBar";
 import CreateHabit from "../../Components/Home/CreateHabit";
 import EditHabit from "../../Components/Home/EditHabit";
+import ChangeNavigationService from "../../Services/ChangeNavigationService";
+/* import CheckService from "../../Services/CheckService"; */
+import DefaultButton from "../../Components/Common/DefaultButton";
+import db from "../../Database";
 
-export default function Home() {
+export default function Home({ route }) {
   const navigation = useNavigation();
 
   const [mindHabit, setMindHabit] = useState();
@@ -16,64 +20,86 @@ export default function Home() {
   const [funHabit, setFunHabit] = useState();
 
   const [robotDaysLife, setRobotDaysLife] = useState();
+  const [checks, setChecks] = useState();
+  const [gameOver, setGameOver] = useState(false);
+  const today = new Date();
 
   function handleNavExplanation() {
     navigation.navigate("AppExplanation");
   }
+
+  useEffect(() => {
+    ChangeNavigationService.checkShowHome(1)
+      .then((showHome) => {
+        const month = `${today.getMonth() + 1}`.padStart(2, "0");
+        const day = `${today.getDate()}`.padStart(2, "0");
+        const formDate = `${today.getFullYear()}-${month}-${day}`;
+        const checkDays =
+          new Date(formDate) - new Date(showHome.appStartData) + 1;
+
+        if (checkDays === 0) {
+          setRobotDaysLife(checkDays.toString().padStart(2, "0"));
+        } else {
+          setRobotDaysLife(parseInt(checkDays / (1000 * 3600 * 24)));
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [route.params]);
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.dailyChecks}>
-            ❤️ 20 dias - ✔️ 80 checks
+            ❤️ {robotDaysLife} {robotDaysLife === "01" ? "dias" : "dia"} - ✔️ 80
+            checks
           </Text>
           <LifeStatus />
           <StatusBar />
         </View>
-        
+
         {mindHabit ? (
-          <EditHabit 
+          <EditHabit
             habit={mindHabit?.habitName}
             frequency={`${mindHabit?.habitTime} - ${mindHabit?.habitFrequency}`}
             habitArea={mindHabit?.habitArea}
             checkColor="#90B7F3"
           />
         ) : (
-          <CreateHabit habitArea="Mente" borderColor="#90B7F3"  /> 
+          <CreateHabit habitArea="Mente" borderColor="#90B7F3" />
         )}
 
         {moneyHabit ? (
-          <EditHabit 
+          <EditHabit
             habit={moneyHabit?.habitName}
             frequency={`${moneyHabit?.habitTime} - ${moneyHabit?.habitFrequency}`}
             habitArea={moneyHabit?.habitArea}
             checkColor="#85BB65"
           />
         ) : (
-          <CreateHabit habitArea="Financeiro" borderColor="#85BB65" /> 
+          <CreateHabit habitArea="Financeiro" borderColor="#85BB65" />
         )}
 
         {bodyHabit ? (
-          <EditHabit 
+          <EditHabit
             habit={bodyHabit?.habitName}
             frequency={`${bodyHabit?.habitTime} - ${bodyHabit?.habitFrequency}`}
             habitArea={bodyHabit?.habitArea}
             checkColor="#FF0044"
           />
-        ) : (   
-        <CreateHabit habitArea="Corpo" borderColor="#FF0044" /> 
+        ) : (
+          <CreateHabit habitArea="Corpo" borderColor="#FF0044" />
         )}
 
         {funHabit ? (
-          <EditHabit 
+          <EditHabit
             habit={funHabit?.habitName}
             frequency={`${funHabit?.habitTime} - ${funHabit?.habitFrequency}`}
             habitArea={funHabit?.habitArea}
             checkColor="#FE7F23"
           />
-        ) : (    
-        <CreateHabit habitArea="Humor" borderColor="#FE7F23" /> 
+        ) : (
+          <CreateHabit habitArea="Humor" borderColor="#FE7F23" />
         )}
 
         <Text
