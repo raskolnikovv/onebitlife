@@ -40,7 +40,7 @@ export default function SelectHabit({ habit, habitInput }) {
         dropdownStyles={styles.dropdownStyle}
         dropdownItemStyles={styles.dropdownItemStyle}
         dropdownTextStyles={styles.dropdownTextStyle}
-        arrowIcon={
+        arrowicon={
           <Image
             source={require("../../../assets/icons/arrowDropdown.png")}
             style={styles.arrow}
