@@ -6,7 +6,10 @@ export default function CreateHabit({ habitArea, borderColor }) {
   const navigation = useNavigation();
 
   function handleCreate() {
-    console.log(`HabitPage: ${habitArea}`);
+    navigation.navigate("HabitPage", {
+      create: true,
+      habit: { habitArea: habitArea },
+    });
   }
 
   return (
