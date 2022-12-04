@@ -1,115 +1,66 @@
-import db from "../Database";
+import * as Notifications from "expo-notifications";
+async function createNotification(
+  habitInput,
+  frequencyInput,
+  dayNotification,
+  timeNotification
+) {
+  const habitHour = Number(timeNotification.slice(0, 2));
+  const habitMinutes = Number(timeNotification.slice(3, 5));
 
-db.transaction((tx) => {
-  tx.executeSql(
-    "CREATE TABLE IF NOT EXISTS habits (id INTEGER PRIMARY KEY AUTOINCREMENT, habitArea TEXT, habitName TEXT, habitFrequency TEXT, habitHasNotification BOOLEAN, habitNotificationFrequency TEXT, habitNotificationTime TEXT, lastCheck TEXT, daysWithoutChecks INTEGER, progressBar INTEGER, habitIsChecked BOOLEAN, habitChecks INTEGER);",
-    [],
-    (_, error) => {
-      console.log(error);
-    }
-  );
-});
+  let weekDay;
 
-const createHabit = (obj) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "INSERT INTO habits (habitArea, habitName, habitFrequency, habitHasNotification, habitNotificationFrequency, habitNotificationTime, lastCheck, daysWithoutChecks, progressBar, habitIsChecked, habitChecks) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-        [
-          obj.habitArea,
-          obj.habitName,
-          obj.habitFrequency,
-          obj.habitHasNotification,
-          obj.habitNotificationFrequency,
-          obj.habitNotificationTime,
-          obj.lastCheck,
-          obj.daysWithoutChecks,
-          obj.progressBar,
-          obj.habitIsChecked,
-          obj.habitChecks,
-        ],
-        (_, { rowsAffected, insertId }) => {
-          if (rowsAffected > 0) resolve(insertId);
-          else reject("Error inserting obj: " + JSON.stringify(obj));
-        },
-        (_, error) => reject(error)
-      );
-    });
+  if (dayNotification === "Domingo") {
+    weekDay = 1;
+  } else if (dayNotification === "Segunda") {
+    weekDay = 2;
+  } else if (dayNotification === "Terça") {
+    weekDay = 3;
+  } else if (dayNotification === "Quarta") {
+    weekDay = 4;
+  } else if (dayNotification === "Quinta") {
+    weekDay = 5;
+  } else if (dayNotification === "Sexta") {
+    weekDay = 6;
+  } else if (dayNotification === "Sábado") {
+    weekDay = 7;
+  }
+
+  let triggerNotification;
+  if (frequencyInput === "Diário") {
+    triggerNotification = {
+      hour: habitHour,
+      minute: habitMinutes,
+      repeats: true,
+    };
+  } else if (frequencyInput === "Semanal") {
+    triggerNotification = {
+      repeats: true,
+      weekday: weekDay,
+      hour: habitHour,
+      minute: habitMinutes,
+    };
+  }
+
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Lembrete de hábito:",
+      body: `${habitInput}`,
+    },
+    identifier: `${habitInput}`,
+    trigger: triggerNotification,
+  }).then((id) => {
+    console.log(id);
   });
-};
+}
 
-const findByArea = (habitArea) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM habits WHERE habitArea LIKE ?;",
-        [habitArea],
-        (_, { rows }) => {
-          if (rows.length > 0) resolve(rows._array);
-        },
-        (_, error) => reject(error)
-      );
-    });
+async function deleteNotification(habitInput) {
+  await Notifications.cancelScheduledNotificationAsync(habitInput).then(() => {
+    console.log("Exclusão feita!");
   });
-};
+}
 
-const updateHabit = (obj) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "UPDATE habits SET habitName=?, habitFrequency=?, habitHasNotification=?, habitNotificationFrequency=?, habitNotificationTime=? WHERE habitArea=?;",
-        [
-          obj.habitName,
-          obj.habitFrequency,
-          obj.habitHasNotification,
-          obj.habitNotificationFrequency,
-          obj.habitNotificationTime,
-          obj.habitArea,
-        ],
-        (_, { rowsAffected }) => {
-          if (rowsAffected > 0) resolve(rowsAffected);
-          else reject("Error updating obj");
-        },
-        (_, error) => reject(error)
-      );
-    });
-  });
-};
-
-const deleteByName = (habitArea) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "DELETE FROM habits WHERE habitArea=?;",
-        [habitArea],
-        (_, { rowsAffected }) => {
-          resolve(rowsAffected);
-        },
-        (_, error) => reject(error)
-      );
-    });
-  });
-};
-
-const changeProgress = (obj) => {
-  return new Promise((resolve, reject) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "UPDATE habits SET progressBar=? WHERE habitArea=?;",
-        [obj.progressBar, obj.habitArea],
-        (_, { rowsAffected }) => {
-          if (rowsAffected > 0) resolve(rowsAffected);
-          else reject("Error updating obj");
-        },
-        (_, error) => reject(error)
-      );
-    });
-  });
-};
 export default {
-  createHabit,
-  findByArea,
-  updateHabit,
-  deleteByName,
-  changeProgress,
+  createNotification,
+  deleteNotification,
 };

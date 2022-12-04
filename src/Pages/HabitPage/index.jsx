@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
+import NotificationService from "../../Services/NotificationService";
 
 import SelectHabit from "../../Components/HabitPage/SelectHabit";
 import SelectFrequency from "../../Components/HabitPage/SelectFrequency";
@@ -73,25 +74,6 @@ export default function HabitPage({ route }) {
           timeNotification
         );
       }
-      HabitsService.createHabit({
-        habitArea: habit?.habitArea,
-        habitName: habitInput,
-        habitFrequency: frequencyInput,
-        habitHasNotification: notificationToggle,
-        habitNotificationFrequency: dayNotification,
-        habitNotificationTime: timeNotification,
-        lastCheck: formatDate,
-        daysWithoutChecks: 0,
-        habitIsChecked: 0,
-        progressBar: 1,
-        habitChecks: 0,
-      }).then(() => {
-        Alert.alert("Sucesso na criação do hábito!");
-
-        navigation.navigate("Home", {
-          createdHabit: `Created in ${habit?.habitArea}`,
-        });
-      });
 
       HabitsService.createHabit({
         habitArea: habit?.habitArea,
@@ -130,15 +112,15 @@ export default function HabitPage({ route }) {
       }).then(() => {
         Alert.alert("Sucesso na atualização do hábito");
         if (!notificationToggle) {
-          /* NotificationService.deleteNotification(habit?.habitName); */
+          NotificationService.deleteNotification(habit?.habitName);
         } else {
-          /* NotificationService.deleteNotification(habit?.habitName);
+          NotificationService.deleteNotification(habit?.habitName);
           NotificationService.createNotification(
             habitInput,
             frequencyInput,
             dayNotification,
             timeNotification
-          ); */
+          );
         }
 
         navigation.navigate("Home", {
@@ -147,7 +129,6 @@ export default function HabitPage({ route }) {
       });
     }
   }
-
   useEffect(() => {
     if (habit?.habitHasNotification == 1) {
       setNotificationToggle(true);
@@ -187,7 +168,7 @@ export default function HabitPage({ route }) {
       <ScrollView>
         <View>
           <TouchableOpacity
-            style={styles.backPageBtn}
+            style={styles.bakcPageBtn}
             onPress={() => navigation.goBack()}
           >
             <Image
@@ -258,7 +239,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(21, 21, 21, 0.98)",
   },
-  backPageBtn: {
+  bakcPageBtn: {
     width: 40,
     height: 40,
     margin: 25,
