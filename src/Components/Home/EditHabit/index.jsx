@@ -5,10 +5,10 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function ({ habit, frequency, habitArea, checkColor }) {
   const navigation = useNavigation();
-  /* const [habitCheck, setHabitCheck] = useState(); */
-  /*   const [checkImage, setCheckImage] = useState(
+  const [habitCheck, setHabitCheck] = useState();
+  const [checkImage, setCheckImage] = useState(
     require("../../../assets/icons/Mind.png")
-  ); */
+  );
 
   function handleEdit() {
     navigation.navigate("HabitPage", {
@@ -18,8 +18,23 @@ export default function ({ habit, frequency, habitArea, checkColor }) {
   }
 
   function handleCheck() {
-    console.log(`Botão de check do ${habit?.habitArea}`);
+    if (habitCheck === 0) {
+      setHabitCheck(1);
+    }
   }
+
+  useEffect(() => {
+    setHabitCheck(habit?.habitIsChecked);
+    if (habit?.habitArea === "Financeiro") {
+      setCheckImage(require("../../../assets/icons/Money.png"));
+    }
+    if (habit?.habitArea === "Corpo") {
+      setCheckImage(require("../../../assets/icons/Body.png"));
+    }
+    if (habit?.habitArea === "Humor") {
+      setCheckImage(require("../../../assets/icons/Fun.png"));
+    }
+  }, []);
 
   const textNotification =
     habit?.habitNotificationTime == null
@@ -36,10 +51,17 @@ export default function ({ habit, frequency, habitArea, checkColor }) {
         <Text style={styles.habitTitle}>{habit?.habitName}</Text>
         <Text style={styles.habitFrequency}>{textNotification}</Text>
       </View>
-      <TouchableOpacity
-        style={[styles.check, { borderColor: checkColor }]}
-        onPress={handleCheck}
-      />
+
+      {habitCheck === 0 ? (
+        <TouchableOpacity
+          style={[styles.check, { borderColor: checkColor }]}
+          onPress={handleCheck}
+        />
+      ) : (
+        <TouchableOpacity onPress={handleCheck}>
+          <Image source={checkImage} style={styles.checked} />
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 }
