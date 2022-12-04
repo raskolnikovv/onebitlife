@@ -107,10 +107,15 @@ export default function Home({ route }) {
     <View style={styles.container}>
       <ScrollView>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.dailyChecks}>
-            ❤️ {robotDaysLife} {robotDaysLife === 1 ? "Dia" : "Dias"} - ✔️{" "}
-            {checks} {checks === 1 ? "Check" : "Checks"}
-          </Text>
+          {!gameOver ? (
+            <Text style={styles.dailyChecks}>
+              ❤️ {robotDaysLife} {robotDaysLife === "01" ? "dia" : "dias"} - ✔️{" "}
+              {checks} {checks === 1 ? "Check" : "Checks"}
+            </Text>
+          ) : (
+            <Text style={styles.gameOverTitle}>Game Over</Text>
+          )}
+
           <LifeStatus
             mindHabit={mindHabit}
             moneyHabit={moneyHabit}
