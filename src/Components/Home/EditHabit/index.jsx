@@ -1,40 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, StyleSheet, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+/* import CheckService from "../../../Services/CheckService"; */
 
 export default function ({ habit, frequency, habitArea, checkColor }) {
   const navigation = useNavigation();
-  const [habitCheck, setHabitCheck] = useState();
-  const [checkImage, setCheckImage] = useState(
+  /* const [habitCheck, setHabitCheck] = useState(); */
+  /*   const [checkImage, setCheckImage] = useState(
     require("../../../assets/icons/Mind.png")
-  );
+  ); */
 
   function handleEdit() {
-    console.log("HabitPage")
-
-  function handleCheck() {
-    console.log("Botão de check do $(habitArea")
+    navigation.navigate("HabitPage", {
+      create: false,
+      habit,
+    });
   }
 
-    return (
+  function handleCheck() {
+    console.log(`Botão de check do ${habit?.habitArea}`);
+  }
+
+  const textNotification =
+    habit?.habitNotificationTime == null
+      ? `Sem notificação - ${habit?.habitFrequency}`
+      : `${habit?.habitNotificationTime} - ${habit?.habitFrequency}`;
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={styles.button}
+      onPress={handleEdit}
+    >
+      <View style={styles.habitText}>
+        <Text style={styles.habitTitle}>{habit?.habitName}</Text>
+        <Text style={styles.habitFrequency}>{textNotification}</Text>
+      </View>
       <TouchableOpacity
-        activeOpacity={0.9}
-        style={styles.button}
-        onPress={handleEdit}
-      >
-        <View style={styles.habitText}>
-          <Text style={styles.habitTitle}>{habit}</Text>
-          <Text style={styles.habitFrequency}>{frequency}</Text>
-        </View>
-        <TouchableOpacity
-          style={[styles.check, { borderColor: checkColor }]}
-          onPress={handleCheck}
-        />
-      </TouchableOpacity>
-      
-    )
-} 
+        style={[styles.check, { borderColor: checkColor }]}
+        onPress={handleCheck}
+      />
+    </TouchableOpacity>
+  );
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -68,4 +76,3 @@ const styles = StyleSheet.create({
     height: 25,
   },
 });
-}
