@@ -29,6 +29,14 @@ export default function Home({ route }) {
     navigation.navigate("AppExplanation");
   }
 
+  function handleGameOver() {
+    navigation.navigate("Start");
+    db.transaction((tx) => {
+      tx.executeSql("DROP TABLE habits;");
+      tx.executeSql("DROP TABLE change_navigation;");
+    });
+  }
+
   const excludeArea = route.params?.excludeArea;
 
   useEffect(() => {
@@ -116,37 +124,49 @@ export default function Home({ route }) {
             funHabit={funHabit?.progressBar}
           />
 
-          {mindHabit ? (
-            <EditHabit habit={mindHabit} checkColor="#90B7F3" />
-          ) : (
-            <CreateHabit habitArea="Mente" borderColor="#90B7F3" />
-          )}
+          {!gameOver ? (
+            <View>
+              {mindHabit ? (
+                <EditHabit habit={mindHabit} checkColor="#90B7F3" />
+              ) : (
+                <CreateHabit habitArea="Mente" borderColor="#90B7F3" />
+              )}
+              {moneyHabit ? (
+                <EditHabit habit={moneyHabit} checkColor="#85BB65" />
+              ) : (
+                <CreateHabit habitArea="Financeiro" borderColor="#85BB65" />
+              )}
+              {bodyHabit ? (
+                <EditHabit habit={bodyHabit} checkColor="#FF0044" />
+              ) : (
+                <CreateHabit habitArea="Corpo" borderColor="#FF0044" />
+              )}
+              {funHabit ? (
+                <EditHabit habit={funHabit} checkColor="#FE7F23" />
+              ) : (
+                <CreateHabit habitArea="Humor" borderColor="#FE7F23" />
+              )}
 
-          {moneyHabit ? (
-            <EditHabit habit={moneyHabit} checkColor="#85BB65" />
+              <Text
+                style={styles.explanationText}
+                onPress={() => {
+                  handleNavExplanation();
+                }}
+              >
+                Ver explicações novamente
+              </Text>
+            </View>
           ) : (
-            <CreateHabit habitArea="Financeiro" borderColor="#85BB65" />
-          )}
-          {bodyHabit ? (
-            <EditHabit habit={bodyHabit} checkColor="#FF0044" />
-          ) : (
-            <CreateHabit habitArea="Corpo" borderColor="#FF0044" />
-          )}
-          {funHabit ? (
-            <EditHabit habit={funHabit} checkColor="#FE7F23" />
-          ) : (
-            <CreateHabit habitArea="Humor" borderColor="#FE7F23" />
+            <View style={{ marginVertical: 40 }}>
+              <DefaultButton
+                buttonText={"Resetar o Game"}
+                handlePress={handleGameOver}
+                width={250}
+                height={50}
+              />
+            </View>
           )}
         </View>
-
-        <Text
-          style={styles.explanationText}
-          onPress={() => {
-            handleNavExplanation();
-          }}
-        >
-          Ver explicações novamente
-        </Text>
       </ScrollView>
     </View>
   );

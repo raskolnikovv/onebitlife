@@ -126,11 +126,11 @@ const removeCheck = (mindHabit, moneyHabit, bodyHabit, funHabit) => {
 const checkStatus = (mindHabit, moneyHabit, bodyHabit, funHabit) => {
   const date = new Date();
 
-  const mindLastCheck = date - new Date(mindHabit?.lastCheck);
+  // Verificação da mente
 
+  const mindLastCheck = date - new Date(mindHabit?.lastCheck);
   const mindDiff = parseInt(mindLastCheck / (1000 * 3600 * 24));
 
-  // Verificação da mente
   if (mindHabit?.habitFrequency === "Diário") {
     if (mindDiff === 1) {
       HabitsService.changeProgress({
@@ -189,7 +189,6 @@ const checkStatus = (mindHabit, moneyHabit, bodyHabit, funHabit) => {
   //Verificação do Financeiro
 
   const moneyLastCheck = date - new Date(moneyHabit?.lastCheck);
-
   const moneyDiff = parseInt(moneyLastCheck / (1000 * 3600 * 24));
 
   if (moneyHabit?.habitFrequency === "Diário") {
@@ -246,10 +245,12 @@ const checkStatus = (mindHabit, moneyHabit, bodyHabit, funHabit) => {
       });
     }
   }
-  // Verificação do corpo
-  const bodyLastCheck = date - new Date(bodyHabit?.lastCheck);
 
+  // Verificação do corpo
+
+  const bodyLastCheck = date - new Date(bodyHabit?.lastCheck);
   const bodyDiff = parseInt(bodyLastCheck / (1000 * 3600 * 24));
+
   if (bodyHabit?.habitFrequency === "Diário") {
     if (bodyDiff === 1) {
       HabitsService.changeProgress({
@@ -305,10 +306,12 @@ const checkStatus = (mindHabit, moneyHabit, bodyHabit, funHabit) => {
       });
     }
   }
-  // Verificação da diversão
-  const funLastCheck = date - new Date(funHabit?.lastCheck);
 
+  // Verificação da diversão
+
+  const funLastCheck = date - new Date(funHabit?.lastCheck);
   const funDiff = parseInt(funLastCheck / (1000 * 3600 * 24));
+
   if (funHabit?.habitFrequency === "Diário") {
     if (funDiff === 1) {
       HabitsService.changeProgress({
