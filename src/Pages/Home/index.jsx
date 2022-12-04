@@ -100,11 +100,15 @@ export default function Home({ route }) {
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.dailyChecks}>
-            ❤️ {robotDaysLife} {robotDaysLife === 1 ? "dia" : "dias"} - ✔️{" "}
+            ❤️ {robotDaysLife} {robotDaysLife === 1 ? "Dia" : "Dias"} - ✔️{" "}
             {checks} {checks === 1 ? "Check" : "Checks"}
-            checks
           </Text>
-          <LifeStatus />
+          <LifeStatus
+            mindHabit={mindHabit}
+            moneyHabit={moneyHabit}
+            bodyHabit={bodyHabit}
+            funHabit={funHabit}
+          />
           <StatusBar
             mindHabit={mindHabit?.progressBar}
             moneyHabit={moneyHabit?.progressBar}
