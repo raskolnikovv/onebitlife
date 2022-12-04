@@ -8,7 +8,7 @@ import CreateHabit from "../../Components/Home/CreateHabit";
 import EditHabit from "../../Components/Home/EditHabit";
 import ChangeNavigationService from "../../Services/ChangeNavigationService";
 import HabitsService from "../../Services/HabitsService";
-/* import CheckService from "../../Services/CheckService"; */
+import CheckService from "../../Services/CheckService";
 import DefaultButton from "../../Components/Common/DefaultButton";
 import db from "../../Database";
 
@@ -77,12 +77,31 @@ export default function Home({ route }) {
       .catch((err) => console.log(err));
   }, [route.params]);
 
+  useEffect(() => {
+    CheckService.removeCheck(mindHabit, moneyHabit, bodyHabit, funHabit);
+    CheckService.checkStatus(mindHabit, moneyHabit, bodyHabit, funHabit);
+    const mindChecks = mindHabit ? mindHabit?.habitChecks : 0;
+    const moneyChecks = moneyHabit ? moneyHabit?.habitChecks : 0;
+    const bodyChecks = bodyHabit ? bodyHabit?.habitChecks : 0;
+    const funChecks = funHabit ? funHabit?.habitChecks : 0;
+    setChecks(mindChecks + moneyChecks + bodyChecks + funChecks);
+    if (
+      mindHabit?.progressBar === 0 ||
+      moneyHabit?.progressBar === 0 ||
+      bodyHabit?.progressBar === 0 ||
+      funHabit?.progressBar === 0
+    ) {
+      setGameOver(true);
+    }
+  }, [mindHabit, moneyHabit, bodyHabit, funHabit]);
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.dailyChecks}>
-            ❤️ {robotDaysLife} {robotDaysLife === "01" ? "dias" : "dia"} - ✔️ 80
+            ❤️ {robotDaysLife} {robotDaysLife === 1 ? "dia" : "dias"} - ✔️{" "}
+            {checks} {checks === 1 ? "Check" : "Checks"}
             checks
           </Text>
           <LifeStatus />
