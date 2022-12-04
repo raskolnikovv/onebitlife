@@ -8,8 +8,8 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-/* import HabitsService from "../../../Services/HabitsService";
-import NotificationService from "../../../Services/NotificationService"; */
+import HabitsService from "../../../Services/HabitsService";
+import NotificationService from "../../../Services/NotificationService";
 
 export default function UpdateExcludeButtons({
   habitInput,
@@ -18,7 +18,7 @@ export default function UpdateExcludeButtons({
 }) {
   const navigation = useNavigation();
 
-  /*  function handleDeleteHabit() {
+  function handleDeleteHabit() {
     HabitsService.deleteByName(habitArea)
       .then(() => {
         Alert.alert("Exclusão feita com sucesso");
@@ -28,7 +28,7 @@ export default function UpdateExcludeButtons({
       })
 
       .catch((err) => console.log(err));
-  } */
+  }
 
   return (
     <View style={styles.container}>
