@@ -29,6 +29,3 @@ O aplicativo **OneBitLife** é um projeto desenvolvido durante a **Semana Mobile
 </div>
 <br/>
 
-## 🔎 Status do Projeto
-
-![Badge em Desenvolvimento](https://img.shields.io/badge/Status-Em%20Desenvolvimento-green)
