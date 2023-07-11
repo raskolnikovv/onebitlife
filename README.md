@@ -28,4 +28,3 @@ O aplicativo **OneBitLife** é um projeto desenvolvido durante a **Semana Mobile
   
 </div>
 <br/>
-
